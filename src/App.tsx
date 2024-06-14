@@ -1,15 +1,15 @@
-import React from 'react';
+import {Provider} from 'react-redux'
+import store from "./store";
+import Form from "./pages/Form";
 
-function App() {
+export default function App() {
+  // const dispatch= useAppDispatch()
+ 
   return (
-    <div className="App">
-       
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      
-    </div>
+    <Provider store={store}>
+     <Form />
+    </Provider>
   );
 }
 
-export default App;
+
