@@ -12,7 +12,6 @@ export interface FormItem {
 
 export interface UserTableProps {
   onEdit: (id: number | string) => void;
-  setSelectedUser: React.Dispatch<React.SetStateAction<GridRowSelectionModel>>;
 }
 
 export interface InputControlProps {
