@@ -20,7 +20,6 @@ export default function Form() {
   // state to manage the dark mode
   const [formValue, setFormValue] = useState<FormItem>(defaultFormValue);
   const [error, seterror] = useState({ name: "", message: "" });
-  const [selectedUser, setSelectedUser] = useState<GridRowSelectionModel>([]);
   const [update, setUpdate] = useState(false);
   console.log("user", user);
 
@@ -37,15 +36,13 @@ export default function Form() {
 
     setFormValue(defaultFormValue);
   };
+
   const onEdit = (id: number | string) => {
     const newArr = user.filter((item) => item.id === id);
     setFormValue(newArr[0]);
     setUpdate(true);
   };
-  const handleDeleteSelectedClick = () => {
-    const newArr = user.filter((item) => !selectedUser.includes(item.id));
-    dispatch(removerUser(newArr));
-  };
+
   return (
     <div
       style={{
@@ -53,7 +50,7 @@ export default function Form() {
         flexDirection: "column",
       }}
     >
-      <h2>Form</h2>
+      <h2 style={{ alignSelf: "center" }}>Form</h2>
       <FormControl
         error={error}
         formValue={formValue}
@@ -64,16 +61,10 @@ export default function Form() {
         sx={{ width: "110px", alignSelf: "center" }}
         onClick={() => onsubmit()}
       >
-        {update ? "Update" : "Add User"}
+        {update ? "Update" : "Submit"}
       </Button>
-      <Button
-        variant="contained"
-        sx={{ width: "250px", mt: 1 }}
-        onClick={() => handleDeleteSelectedClick()}
-      >
-        Delete Selected User
-      </Button>
-      <UserTable onEdit={onEdit} setSelectedUser={setSelectedUser} />
+
+      <UserTable onEdit={onEdit} />
     </div>
   );
 }
