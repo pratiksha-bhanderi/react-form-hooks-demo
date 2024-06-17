@@ -1,7 +1,7 @@
 // FormSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
 export const defaultFormValue = {
-    id:0,
+  id: "",
   first_name: "",
   last_name: "",
   middle_name: "",
@@ -15,20 +15,24 @@ interface initialStateProps {
 const initialState: initialStateProps = {
   user: [],
 };
+
 export const formSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    addUser: (state, action) => ({
+    addUser: (state, { payload }) => ({
       ...state,
-      user: [...state.user, action.payload],
+      user: [...state.user, payload],
     }),
-
-    // ...
-    finalAction: (state, action) => ({
+    updateUser: (state, { payload }) => ({
       ...state,
-      otherProperty: action.payload,
+
+      user: payload,
+    }),
+    removerUser: (state, { payload }) => ({
+      ...state,
+      user: payload,
     }),
   },
 });
-export const { addUser } = formSlice.actions;
+export const { addUser, removerUser, updateUser } = formSlice.actions;

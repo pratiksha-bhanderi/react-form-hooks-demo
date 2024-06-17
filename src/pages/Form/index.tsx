@@ -3,59 +3,77 @@ import { useState } from "react";
 
 import FormControl from "../../components/Form";
 import UserTable from "../../components/UserTable";
-import {useSelector} from 'react-redux'
-import { FormItem } from "../../store/interface";
-import { useAppDispatch, type RootState } from '../../store'
-import { addUser, defaultFormValue } from "../../store/slice/FormSlice";
+import { useSelector } from "react-redux";
+import { useAppDispatch, type RootState } from "../../store";
+import {
+  addUser,
+  defaultFormValue,
+  removerUser,
+  updateUser,
+} from "../../store/slice/FormSlice";
+import { GridRowSelectionModel } from "@mui/x-data-grid";
+import { FormItem } from "../../utils/types";
 
 export default function Form() {
-  const dispatch= useAppDispatch()
-  const {user} = useSelector((state:RootState) => state.form);
+  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: RootState) => state.form);
   // state to manage the dark mode
   const [formValue, setFormValue] = useState<FormItem>(defaultFormValue);
-  const [error, seterror] = useState({name:"", message: "" });
-  console.log('user',user);
-  
+  const [error, seterror] = useState({ name: "", message: "" });
+  const [selectedUser, setSelectedUser] = useState<GridRowSelectionModel>([]);
+  const [update, setUpdate] = useState(false);
+  console.log("user", user);
+
   const onsubmit = () => {
-    // const { first_name, last_name, phone_number, email, password } = formValue;
-    // if (first_name.length <= 0) {
-    //   seterror({ name:'First Name' ,message: "Enter First Name" });
-    // } else if (last_name.length <= 0) {
-    //   seterror({ name:'Last Name' ,message: "Enter Last Name" });
-    // } else if (phone_number.length <=0) {
-    //   seterror({ name:'Phone Number' ,message: "Enter Phone Number" });
-    // } else if (email.length <= 0) {
-    //   seterror({ name:'Email' ,message: "Enter Email Address" });
-    // } else if (password.length <= 0) {
-    //   seterror({ name:'Password' ,message: "Enter Password" });
-    // } else{
-      console.log("formValue", formValue);
-      dispatch(addUser({...formValue,id:user.length}))
-    // }
+    if (update) {
+      let newArr = user.map((item) => {
+        return item.id === formValue?.id ? formValue : item;
+      });
+      dispatch(updateUser(newArr));
+    } else {
+      dispatch(addUser({ ...formValue, id: user.length }));
+    }
+    setUpdate(false);
 
+    setFormValue(defaultFormValue);
   };
-
+  const onEdit = (id: number | string) => {
+    const newArr = user.filter((item) => item.id === id);
+    setFormValue(newArr[0]);
+    setUpdate(true);
+  };
+  const handleDeleteSelectedClick = () => {
+    const newArr = user.filter((item) => !selectedUser.includes(item.id));
+    dispatch(removerUser(newArr));
+  };
   return (
-  
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <h2>Form</h2>
+      <FormControl
+        error={error}
+        formValue={formValue}
+        setFormValue={setFormValue}
+      />
+      <Button
+        variant="contained"
+        sx={{ width: "110px", alignSelf: "center" }}
+        onClick={() => onsubmit()}
       >
-        <h2>Form</h2>
-        <FormControl
-          error={error}
-          formValue={formValue}
-          setFormValue={setFormValue}
-        />
-        <Button variant="contained" onClick={() => onsubmit()}>
-          Contained
-        </Button>
-        <UserTable />
-      </div>
+        {update ? "Update" : "Add User"}
+      </Button>
+      <Button
+        variant="contained"
+        sx={{ width: "250px", mt: 1 }}
+        onClick={() => handleDeleteSelectedClick()}
+      >
+        Delete Selected User
+      </Button>
+      <UserTable onEdit={onEdit} setSelectedUser={setSelectedUser} />
+    </div>
   );
 }
-
-
