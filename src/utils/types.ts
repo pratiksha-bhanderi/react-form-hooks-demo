@@ -1,13 +1,22 @@
-import { GridRowSelectionModel } from "@mui/x-data-grid";
+import { useDispatch } from "react-redux";
+import store, { rootReducer } from "../store";
 
+export type RootState = ReturnType<typeof rootReducer>;
+
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export interface FormItem {
   first_name: string;
   last_name: string;
   middle_name: string;
   phone_number: string;
   email: string;
-  password: string;
   id: number | string | null;
+}
+export interface initialStateProps {
+  user: any[];
+  userEdit: FormItem;
 }
 
 export interface UserTableProps {
@@ -31,8 +40,8 @@ export interface Error {
   name: string;
   message: string;
 }
-export interface FormProps {
-  formValue: FormItem;
-  setFormValue: React.Dispatch<React.SetStateAction<FormItem>>;
-  error: Error;
-}
+// export interface FormProps {
+//   formValue: FormItem;
+//   setFormValue: React.Dispatch<React.SetStateAction<FormItem>>;
+//   error: Error;
+// }
