@@ -44,23 +44,22 @@ const UserList: FC = () => {
       field: "ischeck",
       type: "actions",
       width: 50,
-      renderHeader: () => {
-        return [
-          <GridActionsCellItem
-            icon={
-              user.length !== 0 && selectedUser.length === user.length ? (
-                <CheckBoxIcon />
-              ) : (
-                <CheckBoxOutlineBlankIcon />
-              )
-            }
-            label="Edit"
-            className="textPrimary"
-            onClick={() => onCheckAllUser()}
-            color="inherit"
-          />,
-        ];
-      },
+      renderHeader: () => (
+        <GridActionsCellItem
+          icon={
+            user.length !== 0 && selectedUser.length === user.length ? (
+              <CheckBoxIcon />
+            ) : (
+              <CheckBoxOutlineBlankIcon />
+            )
+          }
+          label="Edit"
+          className="textPrimary"
+          onClick={() => onCheckAllUser()}
+          color="inherit"
+        />
+      ),
+
       renderCell: ({ id }) => {
         return [
           <GridActionsCellItem
@@ -107,21 +106,23 @@ const UserList: FC = () => {
       width: 230,
       cellClassName: "actions",
       renderCell: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
+        return (
+          <>
+            <GridActionsCellItem
+              icon={<EditIcon />}
+              label="Edit"
+              className="textPrimary"
+              onClick={handleEditClick(id)}
+              color="inherit"
+            />
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={handleDeleteClick(id)}
+              color="inherit"
+            />
+          </>
+        );
       },
     },
   ];

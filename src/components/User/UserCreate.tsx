@@ -2,40 +2,55 @@
 import { FC, useEffect, useState } from "react";
 import InputControl from "../InputControl";
 import { Button, Grid, Stack } from "@mui/material";
-import { FormItem, RootState, useAppDispatch } from "../../utils/types";
+import {
+  FormItem,
+  RootState,
+  handleOnChangeProps,
+  useAppDispatch,
+} from "../../utils/types";
+import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
-import { defaultFormValue } from "../../utils/const";
+import { defaultFormValue } from "../../utils/constant";
 import { addUser, updateUser } from "../../store/slice/userSlice";
+import { checkObjectIsEmpty } from "../../utils/validation";
 
 const FormControl: FC = () => {
   const dispatch = useAppDispatch();
   const { user, userEdit } = useSelector(({ user }: RootState) => user);
   const [formValue, setFormValue] = useState<FormItem>(defaultFormValue);
   const [error] = useState({ name: "", message: "" });
-  const [update, setUpdate] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  useEffect(() => {
+    if (checkObjectIsEmpty(formValue)) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [formValue]);
+  console.log("user", user);
 
   useEffect(() => {
     if (userEdit.id !== "") {
       setFormValue(userEdit);
-      setUpdate(true);
     }
   }, [userEdit]);
 
   const onsubmit = () => {
-    if (update) {
+    if (formValue.id !== "") {
       let newArr = user.map((item) => {
         return item.id === formValue?.id ? formValue : item;
       });
       dispatch(updateUser(newArr));
     } else {
-      const newObj = { ...formValue, id: user.length };
+      const newObj = { ...formValue, id: uuidv4() };
       dispatch(addUser(newObj));
     }
-    setUpdate(false);
 
     setFormValue(defaultFormValue);
   };
-
+  const handleOnChange = ({ name, value }: handleOnChangeProps) => {
+    setFormValue({ ...formValue, [name]: value });
+  };
   return (
     <Stack sx={{ alignItems: "center" }}>
       <form onSubmit={onsubmit}>
@@ -52,7 +67,7 @@ const FormControl: FC = () => {
               label={"First Name"}
               type={"text"}
               onChange={(value) =>
-                setFormValue({ ...formValue, first_name: value })
+                handleOnChange({ name: "first_name", value })
               }
               required
               error={error}
@@ -64,9 +79,7 @@ const FormControl: FC = () => {
               name={"Last Name"}
               label={"Last Name"}
               type={"text"}
-              onChange={(value) =>
-                setFormValue({ ...formValue, last_name: value })
-              }
+              onChange={(value) => handleOnChange({ name: "last_name", value })}
               required
               error={error}
             />
@@ -79,7 +92,7 @@ const FormControl: FC = () => {
               label={"Middle Name"}
               type={"text"}
               onChange={(value) =>
-                setFormValue({ ...formValue, middle_name: value })
+                handleOnChange({ name: "middle_name", value })
               }
               required
               error={error}
@@ -92,7 +105,7 @@ const FormControl: FC = () => {
               label={"Phone Number"}
               type={"text"}
               onChange={(value) =>
-                setFormValue({ ...formValue, phone_number: value })
+                handleOnChange({ name: "phone_number", value })
               }
               required
               error={error}
@@ -104,7 +117,7 @@ const FormControl: FC = () => {
               value={formValue.email}
               name={"Email"}
               label={"Email"}
-              onChange={(value) => setFormValue({ ...formValue, email: value })}
+              onChange={(value) => handleOnChange({ name: "email", value })}
               type={"text"}
               required
               error={error}
@@ -112,10 +125,11 @@ const FormControl: FC = () => {
           </Grid>
           <Button
             variant="contained"
+            disabled={disabled}
             sx={{ width: "110px", alignSelf: "center" }}
             onClick={onsubmit}
           >
-            {update ? "Update" : "Submit"}
+            {formValue.id !== "" ? "Update" : "Submit"}
           </Button>
         </Grid>
       </form>

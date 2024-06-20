@@ -1,7 +1,7 @@
 // FormSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
 import { initialStateProps } from "../../utils/types";
-import { defaultFormValue } from "../../utils/const";
+import { defaultFormValue } from "../../utils/constant";
 
 const initialState: initialStateProps = {
   user: [],

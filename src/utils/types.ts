@@ -40,6 +40,10 @@ export interface Error {
   name: string;
   message: string;
 }
+export interface handleOnChangeProps {
+  name: string;
+  value: string;
+}
 // export interface FormProps {
 //   formValue: FormItem;
 //   setFormValue: React.Dispatch<React.SetStateAction<FormItem>>;
