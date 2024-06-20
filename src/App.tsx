@@ -1,15 +1,11 @@
-import {Provider} from 'react-redux'
+import { Provider } from "react-redux";
 import store from "./store";
-import Form from "./pages/Form";
+import User from "./pages/User";
 
 export default function App() {
-  // const dispatch= useAppDispatch()
- 
   return (
     <Provider store={store}>
-     <Form />
+      <User />
     </Provider>
   );
 }
-
-
