@@ -9,10 +9,10 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export interface FormItem {
   first_name: string;
   last_name: string;
-  middle_name: string;
+  middle_name?: string;
   phone_number: string;
   email: string;
-  id: number | string | null;
+  id?: string;
 }
 export interface initialStateProps {
   user: any[];
@@ -24,16 +24,10 @@ export interface UserTableProps {
 }
 
 export interface InputControlProps {
-  value: any;
   name: string;
   label: string;
-  type: "text" | "number" | "email" | "password" | "tel";
+  type?: "text" | "number" | "email" | "password" | "tel";
   required?: boolean;
-  error: {
-    name: string;
-    message: string;
-  };
-  onChange: (value: string) => void;
 }
 
 export interface Error {

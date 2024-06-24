@@ -1,26 +1,36 @@
 import { FC } from "react";
 import { TextField } from "@mui/material";
 import { InputControlProps } from "../../utils/types";
+import { Controller, useFormContext } from "react-hook-form";
 
 const InputControl: FC<InputControlProps> = ({
-  value,
   name,
   label,
+  type = "text",
   required = false,
-  error,
-  type,
-  onChange,
 }) => {
+  const { control } = useFormContext();
   return (
-    <TextField
+    <Controller
       name={name}
-      value={value}
-      type={type}
-      fullWidth
-      onChange={(event) => onChange(event.target.value)}
-      required={required}
-      label={label}
-      sx={{ mb: "10px" }}
+      control={control}
+      render={({
+        field: { onChange, value, ref },
+        fieldState: { error },
+        formState,
+      }) => (
+        <TextField
+          inputRef={ref}
+          value={value}
+          fullWidth
+          type={type}
+          onChange={onChange}
+          required={required}
+          label={label}
+          error={!!error}
+          helperText={error ? error.message : null}
+        />
+      )}
     />
   );
 };
