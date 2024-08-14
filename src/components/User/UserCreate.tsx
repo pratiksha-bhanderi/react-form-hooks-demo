@@ -73,6 +73,7 @@ const FormControl: FC = () => {
               <InputControl
                 name={"phone_number"}
                 label={"Phone Number"}
+                type={"number"}
                 required
               />
             </Grid>
