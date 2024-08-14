@@ -27,3 +27,32 @@ export const userSchema = yup.object().shape({
     .required("Phone number is required")
     .matches(REGEX.mobileNumber, "Invalid Indian phone number"),
 });
+
+export const loginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email")
+    .required("Email is required")
+    .matches(REGEX.email, "Invalid email address"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .matches(REGEX.password, "Invalid Password"),
+});
+
+export const signUpSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Name is required")
+    .min(3, "Name must be at least 3 characters")
+    .max(50, "Name must be at most 50 characters"),
+  email: yup
+    .string()
+    .email("Invalid email")
+    .required("Email is required")
+    .matches(REGEX.email, "Invalid email address"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .matches(REGEX.password, "Invalid Password"),
+});

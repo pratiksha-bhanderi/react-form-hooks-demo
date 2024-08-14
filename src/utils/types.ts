@@ -14,9 +14,29 @@ export interface FormItem {
   email: string;
   id?: string;
 }
+export interface LoginItem {
+  email: string;
+  password: string;
+}
+
+export interface SignupItem {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export interface initialStateProps {
   user: any[];
   userEdit: FormItem;
+}
+interface userProps {
+  email: string;
+  name: string;
+  password: string;
+}
+export interface initialAuthProps {
+  userData: userProps;
+  userToken: null | string;
 }
 
 export interface UserTableProps {
