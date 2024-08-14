@@ -2,138 +2,102 @@
 import { FC, useEffect, useState } from "react";
 import InputControl from "../InputControl";
 import { Button, Grid, Stack } from "@mui/material";
-import {
-  FormItem,
-  RootState,
-  handleOnChangeProps,
-  useAppDispatch,
-} from "../../utils/types";
+import { FormItem, RootState, useAppDispatch } from "../../utils/types";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import { defaultFormValue } from "../../utils/constant";
-import { addUser, updateUser } from "../../store/slice/userSlice";
+import { addUser, editUser, updateUser } from "../../store/slice/userSlice";
 import { checkObjectIsEmpty } from "../../utils/validation";
-
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { userSchema } from "../../utils/schema";
 const FormControl: FC = () => {
   const dispatch = useAppDispatch();
   const { user, userEdit } = useSelector(({ user }: RootState) => user);
-  const [formValue, setFormValue] = useState<FormItem>(defaultFormValue);
-  const [error] = useState({ name: "", message: "" });
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
+  const methods = useForm<FormItem>({
+    defaultValues: defaultFormValue,
+    resolver: yupResolver(userSchema),
+    mode: "all",
+  });
+
   useEffect(() => {
-    if (checkObjectIsEmpty(formValue)) {
+    if (checkObjectIsEmpty(methods.watch())) {
       setDisabled(true);
     } else {
       setDisabled(false);
     }
-  }, [formValue]);
-  console.log("user", user);
+  });
 
   useEffect(() => {
     if (userEdit.id !== "") {
-      setFormValue(userEdit);
+      methods.reset(userEdit);
     }
   }, [userEdit]);
 
-  const onsubmit = () => {
-    if (formValue.id !== "") {
+  const onsubmit = (formValue: FormItem) => {
+    if (formValue?.id) {
       let newArr = user.map((item) => {
         return item.id === formValue?.id ? formValue : item;
       });
       dispatch(updateUser(newArr));
+      dispatch(editUser({}));
     } else {
       const newObj = { ...formValue, id: uuidv4() };
       dispatch(addUser(newObj));
     }
 
-    setFormValue(defaultFormValue);
-  };
-  const handleOnChange = ({ name, value }: handleOnChangeProps) => {
-    setFormValue({ ...formValue, [name]: value });
+    methods.reset(defaultFormValue);
   };
   return (
-    <Stack sx={{ alignItems: "center" }}>
-      <form onSubmit={onsubmit}>
-        <Grid
-          container
-          width={"423px"}
-          sx={{ justifyContent: "center", mt: 2 }}
-          spacing={2}
-        >
-          <Grid item>
-            <InputControl
-              value={formValue.first_name}
-              name={"First Name"}
-              label={"First Name"}
-              type={"text"}
-              onChange={(value) =>
-                handleOnChange({ name: "first_name", value })
-              }
-              required
-              error={error}
-            />
-          </Grid>
-          <Grid item>
-            <InputControl
-              value={formValue.last_name}
-              name={"Last Name"}
-              label={"Last Name"}
-              type={"text"}
-              onChange={(value) => handleOnChange({ name: "last_name", value })}
-              required
-              error={error}
-            />
-          </Grid>
-
-          <Grid item>
-            <InputControl
-              value={formValue.middle_name}
-              name={"Middle Name"}
-              label={"Middle Name"}
-              type={"text"}
-              onChange={(value) =>
-                handleOnChange({ name: "middle_name", value })
-              }
-              required
-              error={error}
-            />
-          </Grid>
-          <Grid item>
-            <InputControl
-              value={formValue.phone_number}
-              name={"Phone Number"}
-              label={"Phone Number"}
-              type={"text"}
-              onChange={(value) =>
-                handleOnChange({ name: "phone_number", value })
-              }
-              required
-              error={error}
-            />
-          </Grid>
-
-          <Grid item width={"420px"}>
-            <InputControl
-              value={formValue.email}
-              name={"Email"}
-              label={"Email"}
-              onChange={(value) => handleOnChange({ name: "email", value })}
-              type={"text"}
-              required
-              error={error}
-            />
-          </Grid>
-          <Button
-            variant="contained"
-            disabled={disabled}
-            sx={{ width: "110px", alignSelf: "center" }}
-            onClick={onsubmit}
+    <FormProvider {...methods}>
+      <Stack sx={{ alignItems: "center" }}>
+        <form onSubmit={methods.handleSubmit(onsubmit)}>
+          <Grid
+            container
+            width={"470px"}
+            sx={{ justifyContent: "center", mt: 2 }}
+            spacing={2}
           >
-            {formValue.id !== "" ? "Update" : "Submit"}
-          </Button>
-        </Grid>
-      </form>
-    </Stack>
+            <Grid item xs={6}>
+              <InputControl name={"first_name"} label={"First Name"} required />
+            </Grid>
+            <Grid item xs={6}>
+              <InputControl name={"last_name"} label={"Last Name"} required />
+            </Grid>
+
+            <Grid item xs={6}>
+              <InputControl name={"middle_name"} label={"Middle Name"} />
+            </Grid>
+            <Grid item xs={6}>
+              <InputControl
+                name={"phone_number"}
+                label={"Phone Number"}
+                type={"number"}
+                required
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <InputControl
+                name={"email"}
+                label={"Email"}
+                type={"email"}
+                required
+              />
+            </Grid>
+            <Button
+              variant="contained"
+              disabled={disabled}
+              sx={{ width: "110px", alignSelf: "center", mt: 2 }}
+              onClick={methods.handleSubmit(onsubmit)}
+            >
+              {userEdit?.id ? "Update" : "Submit"}
+            </Button>
+          </Grid>
+        </form>
+      </Stack>
+    </FormProvider>
   );
 };
 
