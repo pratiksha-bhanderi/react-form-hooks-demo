@@ -15,3 +15,19 @@ export const defaultSignUpFormValue = {
   email: "",
   password: "",
 };
+
+export const defaultProductFormValue = {
+  title: "",
+  description: "",
+  category: "",
+  price: "",
+  // rating: "",
+  stock: "",
+  sku: "",
+  brand: "",
+  availabilityStatus: "",
+  shippingInformation: "",
+  warrantyInformation: "",
+  returnPolicy: "",
+  thumbnail: "",
+};

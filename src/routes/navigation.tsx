@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../utils/types";
 import User from "../pages/User";
 import NotFound404 from "../pages/404";
+import AddProductScreen from "../pages/Products";
 
 export function PrivateRoute({
   children,
@@ -47,6 +48,14 @@ export const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <User />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/addProduct",
+    element: (
+      <PrivateRoute>
+        <AddProductScreen />
       </PrivateRoute>
     ),
   },

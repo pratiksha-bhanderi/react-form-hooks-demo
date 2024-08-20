@@ -39,6 +39,11 @@ export interface initialAuthProps {
   userToken: null | string;
 }
 
+export interface initialProductsProps {
+  loading: boolean;
+  productList: ProductItem[];
+}
+
 export interface UserTableProps {
   onEdit: (id: number | string) => void;
 }
@@ -63,3 +68,26 @@ export interface handleOnChangeProps {
 //   setFormValue: React.Dispatch<React.SetStateAction<FormItem>>;
 //   error: Error;
 // }
+
+// add products
+export interface reviewItem {
+  rating: string;
+  comment: string;
+  reviewerName: string;
+  reviewerEmail: string;
+}
+export interface ProductItem {
+  title: string;
+  description: string;
+  category: string;
+  price: string;
+  // rating: string;
+  stock: string;
+  sku: string;
+  brand: string;
+  availabilityStatus: string;
+  shippingInformation: string;
+  warrantyInformation: string;
+  returnPolicy: string;
+  thumbnail: string;
+}

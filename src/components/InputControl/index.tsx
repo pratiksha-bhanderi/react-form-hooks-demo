@@ -41,9 +41,9 @@ const InputControl: FC<InputControlProps> = ({
           inputRef={ref}
           value={value}
           fullWidth
-          onWheel={(event: { preventDefault: () => void }) => {
-            event.preventDefault();
-          }}
+          // onWheel={(event: any) => {
+          //   event.preventDefault();
+          // }}
           type={type}
           onChange={onChange}
           required={required}

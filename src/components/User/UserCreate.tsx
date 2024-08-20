@@ -27,13 +27,13 @@ const FormControl: FC = () => {
     } else {
       setDisabled(false);
     }
-  });
+  }, [methods, methods.watch]);
 
   useEffect(() => {
     if (userEdit.id !== "") {
       methods.reset(userEdit);
     }
-  }, [userEdit]);
+  }, [methods, userEdit]);
 
   const onsubmit = (formValue: FormItem) => {
     if (formValue?.id) {

@@ -11,18 +11,12 @@ import { Container } from "@mui/material";
 import logo from "../../assets/images/logo.png";
 import { FormProvider, useForm } from "react-hook-form";
 import { defaultSignUpFormValue } from "../../utils/constant";
-import {
-  LoginItem,
-  RootState,
-  SignupItem,
-  useAppDispatch,
-} from "../../utils/types";
+import { SignupItem, useAppDispatch } from "../../utils/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../../utils/schema";
 import InputControl from "../../components/InputControl";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../store/slice/authSlice";
-import { useSelector } from "react-redux";
 const defaultTheme = createTheme();
 
 export default function SignUpScreen() {
@@ -98,7 +92,11 @@ export default function SignUpScreen() {
                   alignItems: "center",
                 }}
               >
-                <img src={logo} style={{ height: "100px", width: "110px" }} />
+                <img
+                  src={logo}
+                  style={{ height: "100px", width: "110px" }}
+                  alt=""
+                />
 
                 <Typography component="h1" variant="h5">
                   Sign Up

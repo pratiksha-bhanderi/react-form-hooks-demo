@@ -109,7 +109,11 @@ export default function LoginScreen() {
                   alignItems: "center",
                 }}
               >
-                <img src={logo} style={{ height: "100px", width: "110px" }} />
+                <img
+                  src={logo}
+                  style={{ height: "100px", width: "110px" }}
+                  alt=""
+                />
 
                 <Typography component="h1" variant="h5">
                   Sign in

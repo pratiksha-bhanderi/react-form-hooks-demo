@@ -23,7 +23,11 @@ export default function NotFound404() {
         justifyContent: "center",
       }}
     >
-      <img src={NotFound404Image} style={{ height: "100%", width: "100%" }} />
+      <img
+        src={NotFound404Image}
+        style={{ height: "100%", width: "100%" }}
+        alt=""
+      />
       <Button
         variant="contained"
         sx={{

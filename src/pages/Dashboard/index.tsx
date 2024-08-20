@@ -1,6 +1,4 @@
 import { Button, Stack, Typography } from "@mui/material";
-import FormControl from "../../components/User/UserCreate";
-import UserTable from "../../components/User/UserList";
 import { RootState, useAppDispatch } from "../../utils/types";
 import { useSelector } from "react-redux";
 import { logout } from "../../store/slice/authSlice";
@@ -19,8 +17,7 @@ export default function DashboardScreen() {
     if (userToken === null) {
       <Navigate to={"/login"} />;
     }
-    console.log("ghsfhsdfhsdhgf", userData);
-  }, [userToken]);
+  }, [userData, userToken]);
   return (
     <Stack
       sx={{

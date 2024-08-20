@@ -56,3 +56,31 @@ export const signUpSchema = yup.object().shape({
     .required("Password is required")
     .matches(REGEX.password, "Invalid Password"),
 });
+
+export const productSchema = yup.object().shape({
+  title: yup
+    .string()
+    .required("Title is required")
+    .min(3, "Title must be at least 3 characters")
+    .max(50, "Title must be at most 50 characters"),
+  description: yup
+    .string()
+    .required("Description is required")
+    .min(3, "Description must be at least 3 characters")
+    .max(50, "Description must be at most 50 characters"),
+  category: yup.string().required("Category is required"),
+  price: yup.string().required("Price is required"),
+  // rating: yup.string().required("Rating is required"),
+  stock: yup.string().required("Stock is required"),
+  sku: yup.string().required("Sku is required"),
+  brand: yup.string().required("Brand is required"),
+  availabilityStatus: yup.string().required("Availability Status is required"),
+  shippingInformation: yup
+    .string()
+    .required("Shipping Information is required"),
+  returnPolicy: yup.string().required("Return Policy is required"),
+  warrantyInformation: yup
+    .string()
+    .required("Warranty Information is required"),
+  thumbnail: yup.string().required("Thumbnail is required"),
+});
