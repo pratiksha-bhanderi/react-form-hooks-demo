@@ -1,11 +1,7 @@
 import { Provider } from "react-redux";
 import store, { persistor } from "./store";
-import Navigation, { router } from "./routes/navigation";
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { router } from "./routes/navigation";
+import { RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "react-hot-toast";
 export default function App() {

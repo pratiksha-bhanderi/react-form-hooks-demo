@@ -1,5 +1,4 @@
-import ReactDOM from "react-dom/client";
-import { Routes, Route, Navigate, createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import LoginScreen from "../pages/Auth/loginScreen";
 import SignUpScreen from "../pages/Auth/signUpScreen";
 import DashboardScreen from "../pages/Dashboard";
@@ -23,31 +22,6 @@ export function PrivateRoute({
     return <Navigate to={"/login"} />;
   }
 }
-export default function Navigation() {
-  return (
-    <Routes>
-      <Route path="/login" element={<LoginScreen />} />
-
-      <Route path="/signUp" element={<SignUpScreen />} />
-      <Route
-        path="/dashboard"
-        element={
-          <PrivateRoute>
-            <DashboardScreen />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/user"
-        element={
-          <PrivateRoute>
-            <User />
-          </PrivateRoute>
-        }
-      />
-    </Routes>
-  );
-}
 
 export const router = createBrowserRouter([
   {
@@ -57,7 +31,27 @@ export const router = createBrowserRouter([
         <DashboardScreen />
       </PrivateRoute>
     ),
-    errorElement: <NotFound404 />,
   },
-  { path: "*", element: <Navigation />, errorElement: <NotFound404 /> },
+  { path: "/login", element: <LoginScreen />, errorElement: <NotFound404 /> },
+  { path: "/signUp", element: <SignUpScreen />, errorElement: <NotFound404 /> },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardScreen />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/user",
+    element: (
+      <PrivateRoute>
+        <User />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "*",
+    element: <NotFound404 />,
+  },
 ]);
