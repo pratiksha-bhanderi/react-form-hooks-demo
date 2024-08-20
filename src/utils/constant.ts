@@ -5,3 +5,13 @@ export const defaultFormValue = {
   phone_number: "",
   email: "",
 };
+
+export const defaultLoginFormValue = {
+  email: "",
+  password: "",
+};
+export const defaultSignUpFormValue = {
+  name: "",
+  email: "",
+  password: "",
+};

@@ -5,4 +5,5 @@ export const REGEX = {
   mobileNumber: /^[6789]\d{9}$/, // india mobile numberm
   OTP: /^\d{6}$/, // 6-digit OTP number,
   slag: /^$|^[a-zA-Z0-9-]+$/,
+  password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
 };
