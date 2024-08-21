@@ -32,24 +32,15 @@ const InputControl: FC<InputControlProps> = ({
     <Controller
       name={`product[${index}].${name}`}
       control={control}
-      render={({
-        field: { onChange, value, ref },
-        fieldState: { error },
-        formState,
-      }) => (
+      render={({ fieldState: { error } }) => (
         <CssTextField
           {...register(`product[${index}].${name}`)}
           className={"input"}
-          inputRef={ref}
-          value={value}
           fullWidth
           // onWheel={(event: any) => {
           //   event.preventDefault();
           // }}
           type={type}
-          onChange={(e) =>
-            setValue(`product[${index}].${name}`, e.currentTarget.value)
-          }
           required={required}
           label={label}
           error={!!error}
