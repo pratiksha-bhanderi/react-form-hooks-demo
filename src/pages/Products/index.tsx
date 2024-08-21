@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ProductItem, RootState, useAppDispatch } from "../../utils/types";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { defaultProductFormValue } from "../../utils/constant";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,10 +19,12 @@ import { addProductActions } from "../../store/actions/productActions";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
+import { addEmptyObj } from "../../store/slice/productSlice";
 export default function AddProductScreen() {
+  const dispatch = useAppDispatch();
   const { productList } = useSelector(({ product }: RootState) => product);
   const fileUploadRef = useRef<any>(null);
-  const dispatch = useAppDispatch();
+  const [addMore, setAddMore] = useState(-1);
   const methods = useForm<ProductItem>({
     defaultValues: defaultProductFormValue,
     resolver: yupResolver(productSchema),
@@ -31,6 +33,7 @@ export default function AddProductScreen() {
   const onsubmit = (formValue: ProductItem) => {
     console.log("ProductItem", formValue);
     dispatch(addProductActions(formValue));
+    setAddMore(productList.length - 1);
     // methods.reset(defaultProductFormValue);
   };
   const uploadImageDisplay = async () => {
@@ -39,7 +42,10 @@ export default function AddProductScreen() {
     // setAvatarURL(cachedURL);
     methods.setValue("thumbnail", cachedURL);
   };
-  console.log("fwergertwer", productList);
+  const onAddMore = async () => {
+    dispatch(addEmptyObj());
+    setAddMore(-1);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -47,7 +53,7 @@ export default function AddProductScreen() {
         {productList.map((input, index) => {
           return (
             <>
-              <Accordion sx={{ width: "90%" }}>
+              <Accordion sx={{ width: "90%", mb: 1 }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
@@ -208,18 +214,21 @@ export default function AddProductScreen() {
                   </Grid>
                 </AccordionDetails>
               </Accordion>
-              <Box
-                sx={{
-                  pl: 1,
-                  pr: 1,
-                  pt: 1,
-                  pb: 0.5,
-                  backgroundColor: "#01a0e1",
-                  borderRadius: 5,
-                }}
-              >
-                <AddIcon sx={{ color: "white" }} />
-              </Box>
+              {index === addMore && (
+                <Box
+                  onClick={onAddMore}
+                  sx={{
+                    pl: 1,
+                    pr: 1,
+                    pt: 1,
+                    pb: 0.5,
+                    backgroundColor: "#01a0e1",
+                    borderRadius: 5,
+                  }}
+                >
+                  <AddIcon sx={{ color: "white" }} />
+                </Box>
+              )}
               {/* <img src={AddIcon} style={{ height: 10, width: 10 }} alt="" /> */}
             </>
           );

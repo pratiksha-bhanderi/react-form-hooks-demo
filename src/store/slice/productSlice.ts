@@ -16,7 +16,11 @@ const initialState: initialProductsProps = {
 export const productSlice = createSlice({
   name: "user",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    addEmptyObj: (state) => {
+      state.productList = [...state.productList, defaultProductFormValue];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addProductActions.pending, (state) => {
@@ -30,3 +34,5 @@ export const productSlice = createSlice({
       });
   },
 });
+
+export const { addEmptyObj } = productSlice.actions;
