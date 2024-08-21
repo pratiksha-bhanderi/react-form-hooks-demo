@@ -31,3 +31,7 @@ export const defaultProductFormValue = {
   returnPolicy: "",
   thumbnail: "",
 };
+
+export const defaultProductListFormValue = {
+  product: [defaultProductFormValue],
+};

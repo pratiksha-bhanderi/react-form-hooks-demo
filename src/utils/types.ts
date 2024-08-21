@@ -53,6 +53,7 @@ export interface InputControlProps {
   label: string;
   type?: "text" | "number" | "email" | "password" | "tel";
   required?: boolean;
+  index?: number;
 }
 
 export interface Error {
@@ -90,4 +91,7 @@ export interface ProductItem {
   warrantyInformation: string;
   returnPolicy: string;
   thumbnail: string;
+}
+export interface ProductList {
+  product: ProductItem[];
 }

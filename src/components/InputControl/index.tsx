@@ -25,11 +25,12 @@ const InputControl: FC<InputControlProps> = ({
   label,
   type = "text",
   required = false,
+  index,
 }) => {
-  const { control } = useFormContext();
+  const { control, register, setValue } = useFormContext();
   return (
     <Controller
-      name={name}
+      name={`product[${index}].${name}`}
       control={control}
       render={({
         field: { onChange, value, ref },
@@ -37,6 +38,7 @@ const InputControl: FC<InputControlProps> = ({
         formState,
       }) => (
         <CssTextField
+          {...register(`product[${index}].${name}`)}
           className={"input"}
           inputRef={ref}
           value={value}
@@ -45,7 +47,9 @@ const InputControl: FC<InputControlProps> = ({
           //   event.preventDefault();
           // }}
           type={type}
-          onChange={onChange}
+          onChange={(e) =>
+            setValue(`product[${index}].${name}`, e.currentTarget.value)
+          }
           required={required}
           label={label}
           error={!!error}

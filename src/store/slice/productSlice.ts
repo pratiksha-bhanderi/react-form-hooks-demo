@@ -20,6 +20,9 @@ export const productSlice = createSlice({
     addEmptyObj: (state) => {
       state.productList = [...state.productList, defaultProductFormValue];
     },
+    resetProductList: (state, { payload }) => {
+      state.productList = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -35,4 +38,4 @@ export const productSlice = createSlice({
   },
 });
 
-export const { addEmptyObj } = productSlice.actions;
+export const { addEmptyObj, resetProductList } = productSlice.actions;
