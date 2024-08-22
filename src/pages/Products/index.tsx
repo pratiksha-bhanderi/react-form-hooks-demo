@@ -8,13 +8,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import {
-  ProductItem,
-  ProductList,
-  RootState,
-  useAppDispatch,
-} from "../../utils/types";
-import { useRef, useState } from "react";
+import { ProductList, useAppDispatch } from "../../utils/types";
+import { useEffect, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import {
   defaultProductFormValue,
@@ -26,64 +21,47 @@ import InputControl from "../../components/InputControl";
 import { addProductActions } from "../../store/actions/productActions";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
-import { useSelector } from "react-redux";
-import { addEmptyObj, resetProductList } from "../../store/slice/productSlice";
+import { useDropzone } from "react-dropzone";
 export default function AddProductScreen() {
   const dispatch = useAppDispatch();
-  const { productList } = useSelector(({ product }: RootState) => product);
-  const fileUploadRef = useRef<any>(null);
   const [addMore, setAddMore] = useState(-1);
+  const [imageIndex, setImageIndex] = useState(-1);
   const methods = useForm<ProductList>({
     defaultValues: defaultProductListFormValue,
     resolver: yupResolver(productSchema),
     mode: "all",
   });
   const { control } = methods;
-  function appendObjTo(thatArray: string | any[], newObj: any) {
-    const frozenObj = Object.freeze(newObj);
-    var newArray = thatArray.slice(thatArray.length, 1);
-    return Object.freeze(newArray.concat(frozenObj));
-  }
+
   const onsubmit = (formValue: ProductList) => {
-    console.log("fvwawefwr", formValue.product[0]);
-
-    dispatch(addProductActions(formValue.product[0]));
-    setAddMore(productList.length - 1);
-    const newArray = appendObjTo(
-      productList,
-      formValue.product[formValue.product.length]
+    dispatch(
+      addProductActions(formValue.product[formValue.product.length - 1])
     );
-    console.log("gdfgsdgazd", newArray);
+    setAddMore(formValue.product.length - 1);
   };
-  const uploadImageDisplay = async (index: number) => {
-    const uploadedFile = fileUploadRef.current.files[0];
-    console.log("hrherhh", index, uploadedFile, fileUploadRef.current.files);
-    const cachedURL = URL.createObjectURL(uploadedFile);
-    console.log("hrherhh", index, cachedURL);
 
-    methods.setValue(`product.${index}.thumbnail`, cachedURL);
-  };
-  const onAddMore = async () => {
-    const newarray = [...methods.watch("product"), defaultProductFormValue];
-    console.log("gadgadg", newarray);
-    methods.setValue("product", newarray);
-    // dispatch(addEmptyObj());
-    setAddMore(-1);
-  };
-  console.log("productList", productList);
-  const { fields, append, remove } = useFieldArray({
+  const { append } = useFieldArray({
     control,
     name: "product",
   });
-  console.log(
-    "methods.getValues(`product.${index}.thumbnail`)",
-    methods.watch("product")
-  );
+  const onAddMore = async () => {
+    append(defaultProductFormValue);
+    setAddMore(-1);
+  };
+  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({});
+  useEffect(() => {
+    if (acceptedFiles.length > 0) {
+      const uploadedFile = acceptedFiles[0];
+      const cachedURL = URL.createObjectURL(uploadedFile);
 
+      methods.setValue(`product.${imageIndex}.thumbnail`, cachedURL);
+      setImageIndex(-1);
+    }
+  }, [acceptedFiles, imageIndex, methods]);
   return (
     <FormProvider {...methods}>
       <Stack sx={{ alignItems: "center" }}>
-        {fields.map((input, index) => {
+        {methods.watch(`product`).map((input, index) => {
           return (
             <>
               <Accordion key={index} sx={{ width: "90%", mb: 1 }}>
@@ -102,6 +80,7 @@ export default function AddProductScreen() {
                     spacing={2}
                   >
                     <Grid
+                      {...getRootProps({ className: "dropzone" })}
                       container
                       md={5}
                       item
@@ -112,13 +91,15 @@ export default function AddProductScreen() {
                       }}
                     >
                       <input
+                        {...getInputProps()}
                         type="file"
-                        onChange={() => uploadImageDisplay(index)}
                         id="file"
-                        ref={fileUploadRef}
                         style={{ display: "none" }}
                       />
-                      <label htmlFor="file">
+                      <label
+                        htmlFor="file"
+                        onClick={() => setImageIndex(index)}
+                      >
                         <Grid
                           item
                           sx={{
